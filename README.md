@@ -34,4 +34,4 @@ DAO_Project/
 ---
 
 ## Resulatdos
-![Resulatdos](img/Resulatdo_DaoProject.png)
+![Resulatdos](img/Resultado_DaoProject.png)
