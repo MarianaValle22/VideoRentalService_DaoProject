@@ -29,9 +29,9 @@ DAO_Project/
 
 ---
 
-## Diagrama UML
-
+## Modelo Base de datos
+![Base de Datos](img/MODEL.png)
 ---
 
 ## Resulatdos
-
+![Resulatdos](img/Resulatdo_DaoProject.png)
