@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.unisabana.dyas.sampleprj.dao.mybatis.mappers.ClienteMapper">
+
+    <resultMap id="ClienteResult" type="edu.unisabana.dyas.samples.entities.Cliente">
+        <id property="documento" column="documento"/>
+        <result property="nombre" column="nombre"/>
+        <result property="telefono" column="telefono"/>
+        <result property="direccion" column="direccion"/>
+        <result property="email" column="email"/>
+        <result property="vetado" column="vetado"/>
+
+        <!-- Relación con ítems rentados -->
+        <collection property="rentados" ofType="edu.unisabana.dyas.samples.entities.ItemRentado"
+                    column="documento" select="consultarItemsRentados"/>
+    </resultMap>
+
+    <resultMap id="ItemRentadoResult" type="edu.unisabana.dyas.samples.entities.ItemRentado">
+        <result property="fechainiciorenta" column="fechainiciorenta" javaType="java.lang.String"/>
+        <result property="fechafinrenta" column="fechafinrenta" javaType="java.lang.String"/>
+        <association property="item" resultMap="edu.unisabana.dyas.sampleprj.dao.mybatis.mappers.ItemMapper.ItemResult"/>
+    </resultMap>
+
+    <select id="consultarItemsRentados" parameterType="int" resultMap="ItemRentadoResult">
+        SELECT
+            ir.fechainiciorenta,
+            ir.fechafinrenta,
+            i.id AS item_id,
+            i.nombre AS item_nombre,
+            i.descripcion AS item_descripcion,
+            i.fechalanzamiento,
+            i.tarifaxdia,
+            i.formatorenta,
+            i.genero,
+            ti.id AS tipoitem_id,
+            ti.descripcion AS tipoitem_descripcion
+        FROM VI_ITEMRENTADO ir
+                 JOIN VI_ITEMS i ON ir.ITEMS_id = i.id
+                 JOIN VI_TIPOITEM ti ON i.TIPOITEM_id = ti.id
+        WHERE ir.CLIENTES_documento = #{documento};
+    </select>
+
+    <select id="consultarClientes" resultMap="ClienteResult">
+        SELECT
+            c.nombre,
+            c.documento,
+            c.telefono,
+            c.direccion,
+            c.email,
+            c.vetado
+        FROM VI_CLIENTES c;
+    </select>
+
+    <select id="consultarCliente" parameterType="long" resultMap="ClienteResult">
+        SELECT
+            c.documento,
+            c.nombre,
+            c.telefono,
+            c.direccion,
+            c.email,
+            c.vetado
+        FROM VI_CLIENTES c
+        WHERE c.documento = #{documento};
+    </select>
+
+    <insert id="agregarItemRentadoACliente">
+        INSERT INTO VI_ITEMRENTADO (CLIENTES_documento, ITEMS_id, fechainiciorenta, fechafinrenta)
+        VALUES (#{clienteId}, #{itemId}, #{fechainicio}, #{fechafin});
+    </insert>
+
+</mapper>

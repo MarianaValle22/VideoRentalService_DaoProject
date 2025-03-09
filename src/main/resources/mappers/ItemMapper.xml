@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.unisabana.dyas.sampleprj.dao.mybatis.mappers.ItemMapper">
+
+    <resultMap id="ItemResult" type="edu.unisabana.dyas.samples.entities.Item">
+        <id property="id" column="item_id"/>
+        <result property="nombre" column="item_nombre"/>
+        <result property="descripcion" column="item_descripcion"/>
+        <result property="fechalanzamiento" column="fechalanzamiento" javaType="java.lang.String"/>
+        <result property="tarifaxdia" column="tarifaxdia" javaType="double"/>
+        <result property="formatorenta" column="formatorenta"/>
+        <result property="genero" column="genero"/>
+        <association property="tipo" resultMap="TipoItemResult"/>
+    </resultMap>
+
+    <resultMap id="TipoItemResult" type="edu.unisabana.dyas.samples.entities.TipoItem">
+        <id property="id" column="tipoitem_id"/>
+        <result property="descripcion" column="tipoitem_descripcion"/>
+    </resultMap>
+
+    <select id="consultarItems" resultMap="ItemResult">
+        SELECT
+            i.id AS i_id,
+            i.nombre AS i_nombre,
+            i.descripcion AS i_descripcion,
+            i.fechalanzamiento, i.tarifaxdia,
+            i.formatorenta,
+            i.genero,
+            ti.id AS ti_id,
+            ti.descripcion AS ti_descripcion
+        FROM VI_ITEMS i
+                 LEFT JOIN VI_TIPOITEM ti ON i.TIPOITEM_id = ti.id;
+    </select>
+    <!-- Consultas -->
+    <select id="consultarItem" parameterType="int" resultMap="ItemResult">
+        SELECT * FROM VI_ITEMS WHERE id = #{id};
+    </select>
+    <insert id="insertarItem">
+        INSERT INTO VI_ITEMS (id, nombre, descripcion, fechalanzamiento, tarifaxdia, formatorenta, genero, TIPOITEM_id)
+        VALUES (#{item.id}, #{item.nombre}, #{item.descripcion}, #{item.fechalanzamiento}, #{item.tarifaxdia},
+                #{item.formatorenta}, #{item.genero}, #{item.tipo.id});
+    </insert>
+
+</mapper>

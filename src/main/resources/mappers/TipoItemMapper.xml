@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.unisabana.dyas.sampleprj.dao.mybatis.mappers.TipoItemMapper">
+
+    <resultMap id="TipoItemResult" type="edu.unisabana.dyas.samples.entities.TipoItem">
+        <id property="id" column="ti_id"/>
+        <result property="descripcion" column="ti_descripcion"/>
+    </resultMap>
+
+    <select id="consultarTipoItems" resultMap="TipoItemResult">
+        SELECT
+            ti.id AS ti_id,
+            ti.descripcion AS ti_descripcion
+        FROM VI_TIPOITEM ti;
+    </select>
+</mapper>
